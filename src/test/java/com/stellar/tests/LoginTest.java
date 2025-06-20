@@ -3,8 +3,8 @@ package com.stellar.tests;
 import com.stellar.api.UserClient;
 import com.stellar.models.User;
 import com.stellar.pages.MainPage;
-import com.stellar.pages.ProfilePage;
 import io.qameta.allure.Description;
+import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.junit.After;
@@ -17,10 +17,6 @@ public class LoginTest extends BaseTest {
     
     private User testUser;
     private UserClient userClient = new UserClient();
-    
-    public LoginTest(String browser) {
-        super(browser);
-    }
     
     @Before
     public void createTestUser() {

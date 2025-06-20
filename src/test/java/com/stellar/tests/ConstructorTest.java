@@ -6,21 +6,19 @@ import io.qameta.allure.junit4.DisplayName;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class ConstructorTest extends BaseTest {
-    
-    public ConstructorTest(String browser) {
-        super(browser);
-    }
     
     @Test
     @DisplayName("Переход на вкладку булок")
     @Description("Тест проверяет возможность перехода на вкладку булок в конструкторе")
     public void navigateToBunsTabTest() {
         MainPage mainPage = new MainPage(driver);
-        mainPage.clickBunsTab();
         
-        assertTrue("Раздел булок должен быть видимым", mainPage.isBunsSectionVisible());
+        mainPage.clickSaucesTab();
+        mainPage.clickBunsTab();
+        assertTrue("После клика на булки, вкладка 'Булки' должна быть активна", mainPage.isBunsTabActive());
     }
     
     @Test
@@ -28,9 +26,9 @@ public class ConstructorTest extends BaseTest {
     @Description("Тест проверяет возможность перехода на вкладку соусов в конструкторе")
     public void navigateToSaucesTabTest() {
         MainPage mainPage = new MainPage(driver);
-        mainPage.clickSaucesTab();
         
-        assertTrue("Раздел соусов должен быть видимым", mainPage.isSaucesSectionVisible());
+        mainPage.clickSaucesTab();
+        assertTrue("После клика вкладка 'Соусы' должна быть активна", mainPage.isSaucesTabActive());
     }
     
     @Test
@@ -38,8 +36,8 @@ public class ConstructorTest extends BaseTest {
     @Description("Тест проверяет возможность перехода на вкладку начинок в конструкторе")
     public void navigateToFillingsTabTest() {
         MainPage mainPage = new MainPage(driver);
-        mainPage.clickFillingsTab();
         
-        assertTrue("Раздел начинок должен быть видимым", mainPage.isFillingsSectionVisible());
+        mainPage.clickFillingsTab();
+        assertTrue("После клика вкладка 'Начинки' должна быть активна", mainPage.isFillingsTabActive());
     }
 }

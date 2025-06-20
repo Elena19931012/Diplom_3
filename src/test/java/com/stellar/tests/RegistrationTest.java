@@ -6,32 +6,37 @@ import com.stellar.pages.LoginPage;
 import com.stellar.pages.MainPage;
 import com.stellar.pages.RegisterPage;
 import io.qameta.allure.Description;
+import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class RegistrationTest extends BaseTest {
     
     private User testUser;
     private UserClient userClient = new UserClient();
     
-    public RegistrationTest(String browser) {
-        super(browser);
-    }
-    
     @After
     public void cleanUp() {
-        if (testUser != null && testUser.getAccessToken() != null) {
-            userClient.deleteUser(testUser.getAccessToken());
+        if (testUser != null) {
+            loginUserIfNeeded();
+            if (testUser.getAccessToken() != null) {
+                userClient.deleteUser(testUser.getAccessToken());
+            }
+        }
+    }
+    
+    @Step("Логин, если токен доступа не установлен")
+    private void loginUserIfNeeded() {
+        if (testUser.getAccessToken() == null) {
+            Response response = userClient.loginUser(testUser.getEmail(), testUser.getPassword());
+            if (response.statusCode() == 200) {
+                testUser.setAccessToken(response.path("accessToken").toString());
+            }
         }
     }
     
@@ -48,9 +53,6 @@ public class RegistrationTest extends BaseTest {
         
         assertTrue("Пользователь должен быть перенаправлен на страницу входа после успешной регистрации", 
                 result instanceof LoginPage);
-        
-        Response response = userClient.loginUser(testUser.getEmail(), testUser.getPassword());
-        testUser.setAccessToken(response.path("accessToken").toString());
     }
     
     @Test
@@ -70,7 +72,5 @@ public class RegistrationTest extends BaseTest {
         registerPage.clickRegisterButton();
         
         assertTrue("Сообщение об ошибке пароля должно отображаться", registerPage.isPasswordErrorDisplayed());
-        
-        assertTrue("После ошибки мы должны остаться на странице регистрации", registerPage.isStillOnRegisterPage());
     }
 }

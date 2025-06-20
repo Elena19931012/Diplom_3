@@ -1,6 +1,5 @@
 package com.stellar.api;
 
-import com.google.gson.Gson;
 import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -10,12 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserClient {
-    private static final String BASE_URL = "https://stellarburgers.nomoreparties.site/api";
-    private static final Gson gson = new Gson();
     
     private RequestSpecification getBaseSpec() {
         return RestAssured.given()
-                .baseUri(BASE_URL)
+                .baseUri(Endpoints.BASE_URL)
                 .header("Content-Type", "application/json");
     }
     
@@ -27,9 +24,9 @@ public class UserClient {
         user.put("name", name);
         
         return getBaseSpec()
-                .body(gson.toJson(user))
+                .body(user)
                 .when()
-                .post("/auth/register");
+                .post(Endpoints.REGISTER);
     }
     
     @Step("Login user via API with email: {email}")
@@ -39,9 +36,9 @@ public class UserClient {
         credentials.put("password", password);
         
         return getBaseSpec()
-                .body(gson.toJson(credentials))
+                .body(credentials)
                 .when()
-                .post("/auth/login");
+                .post(Endpoints.LOGIN);
     }
     
     @Step("Delete user via API")
@@ -49,6 +46,6 @@ public class UserClient {
         return getBaseSpec()
                 .auth().oauth2(accessToken.replace("Bearer ", ""))
                 .when()
-                .delete("/auth/user");
+                .delete(Endpoints.USER);
     }
 }

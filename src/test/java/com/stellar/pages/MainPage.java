@@ -67,25 +67,61 @@ public class MainPage {
     @Step("Нажатие на вкладку 'Булки'")
     public void clickBunsTab() {
         WebElement tab = wait.until(ExpectedConditions.elementToBeClickable(bunsTab));
-
-        JavascriptExecutor executor = (JavascriptExecutor) driver;
-        executor.executeScript("arguments[0].click();", tab);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", tab);
+        
+        try {
+            tab.click();
+        } catch (Exception e) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", tab);
+        }
+        
+        wait.until(ExpectedConditions.visibilityOf(bunsSection));
+        
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
     
     @Step("Нажатие на вкладку 'Соусы'")
     public void clickSaucesTab() {
         WebElement tab = wait.until(ExpectedConditions.elementToBeClickable(saucesTab));
-
-        JavascriptExecutor executor = (JavascriptExecutor) driver;
-        executor.executeScript("arguments[0].click();", tab);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", tab);
+        
+        try {
+            tab.click();
+        } catch (Exception e) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", tab);
+        }
+        
+        wait.until(ExpectedConditions.visibilityOf(saucesSection));
+        
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
     
     @Step("Нажатие на вкладку 'Начинки'")
     public void clickFillingsTab() {
         WebElement tab = wait.until(ExpectedConditions.elementToBeClickable(fillingsTab));
-
-        JavascriptExecutor executor = (JavascriptExecutor) driver;
-        executor.executeScript("arguments[0].click();", tab);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", tab);
+        
+        try {
+            tab.click();
+        } catch (Exception e) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", tab);
+        }
+        
+        wait.until(ExpectedConditions.visibilityOf(fillingsSection));
+        
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
     
     @Step("Проверка видимости раздела 'Булки'")
@@ -111,5 +147,26 @@ public class MainPage {
     @Step("Проверка отображения кнопки 'Оформить заказ' (пользователь авторизован)")
     public boolean isOrderButtonDisplayed() {
         return wait.until(ExpectedConditions.visibilityOf(orderButton)).isDisplayed();
+    }
+    
+    @Step("Проверка что вкладка 'Булки' активна")
+    public boolean isBunsTabActive() {
+        WebElement tab = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//div[contains(@class, 'tab_tab__1SPyG')][.//span[text()='Булки']]")));
+        return tab.getAttribute("class").contains("tab_tab_type_current__2BEPc");
+    }
+    
+    @Step("Проверка что вкладка 'Соусы' активна")
+    public boolean isSaucesTabActive() {
+        WebElement tab = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//div[contains(@class, 'tab_tab__1SPyG')][.//span[text()='Соусы']]")));
+        return tab.getAttribute("class").contains("tab_tab_type_current__2BEPc");
+    }
+    
+    @Step("Проверка что вкладка 'Начинки' активна")
+    public boolean isFillingsTabActive() {
+        WebElement tab = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//div[contains(@class, 'tab_tab__1SPyG')][.//span[text()='Начинки']]")));
+        return tab.getAttribute("class").contains("tab_tab_type_current__2BEPc");
     }
 }
