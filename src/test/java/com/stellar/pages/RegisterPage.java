@@ -14,10 +14,10 @@ public class RegisterPage {
     private WebDriver driver;
     private WebDriverWait wait;
     
-    @FindBy(xpath = "//fieldset[1]//input[@name='name']")
+    @FindBy(xpath = "//input[@placeholder='Имя' or @name='name' and not(@type='email')]")
     private WebElement nameInput;
     
-    @FindBy(xpath = "//fieldset[2]//input[@name='name']")
+    @FindBy(xpath = "//input[@name='name' and @type='email'] | //input[@placeholder='E-mail']")
     private WebElement emailInput;
     
     @FindBy(xpath = "//input[@type='password']")
@@ -84,15 +84,15 @@ public class RegisterPage {
         clickRegisterButton();
         
         try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        
-        if (isPasswordErrorDisplayed()) {
-            return this; 
-        } else {
-            return new LoginPage(driver);
+            wait.until(ExpectedConditions.visibilityOf(passwordError));
+            return this;
+        } catch (Exception e) {
+            try {
+                wait.until(ExpectedConditions.invisibilityOf(registerButton));
+                return new LoginPage(driver); 
+            } catch (Exception ex) {
+                return this; 
+            }
         }
     }
     

@@ -47,6 +47,11 @@ public class MainPage {
     @FindBy(xpath = "//h2[text()='Начинки']")
     private WebElement fillingsSection;
     
+    // Локаторы для проверки активности вкладок
+    private By bunsTabLocator = By.xpath("//div[contains(@class, 'tab_tab__1SPyG')][.//span[text()='Булки']]");
+    private By saucesTabLocator = By.xpath("//div[contains(@class, 'tab_tab__1SPyG')][.//span[text()='Соусы']]");
+    private By fillingsTabLocator = By.xpath("//div[contains(@class, 'tab_tab__1SPyG')][.//span[text()='Начинки']]");
+    
     public MainPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -76,12 +81,6 @@ public class MainPage {
         }
         
         wait.until(ExpectedConditions.visibilityOf(bunsSection));
-        
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
     
     @Step("Нажатие на вкладку 'Соусы'")
@@ -96,12 +95,6 @@ public class MainPage {
         }
         
         wait.until(ExpectedConditions.visibilityOf(saucesSection));
-        
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
     
     @Step("Нажатие на вкладку 'Начинки'")
@@ -116,12 +109,6 @@ public class MainPage {
         }
         
         wait.until(ExpectedConditions.visibilityOf(fillingsSection));
-        
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
     
     @Step("Проверка видимости раздела 'Булки'")
@@ -151,22 +138,19 @@ public class MainPage {
     
     @Step("Проверка что вкладка 'Булки' активна")
     public boolean isBunsTabActive() {
-        WebElement tab = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(@class, 'tab_tab__1SPyG')][.//span[text()='Булки']]")));
+        WebElement tab = wait.until(ExpectedConditions.presenceOfElementLocated(bunsTabLocator));
         return tab.getAttribute("class").contains("tab_tab_type_current__2BEPc");
     }
     
     @Step("Проверка что вкладка 'Соусы' активна")
     public boolean isSaucesTabActive() {
-        WebElement tab = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(@class, 'tab_tab__1SPyG')][.//span[text()='Соусы']]")));
+        WebElement tab = wait.until(ExpectedConditions.presenceOfElementLocated(saucesTabLocator));
         return tab.getAttribute("class").contains("tab_tab_type_current__2BEPc");
     }
     
     @Step("Проверка что вкладка 'Начинки' активна")
     public boolean isFillingsTabActive() {
-        WebElement tab = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(@class, 'tab_tab__1SPyG')][.//span[text()='Начинки']]")));
+        WebElement tab = wait.until(ExpectedConditions.presenceOfElementLocated(fillingsTabLocator));
         return tab.getAttribute("class").contains("tab_tab_type_current__2BEPc");
     }
 }
